@@ -1,0 +1,7 @@
+Turtles are cool
+I like them
+File objects have to be explicitly opened for writing
+Some other stuff
+
+banana
+
