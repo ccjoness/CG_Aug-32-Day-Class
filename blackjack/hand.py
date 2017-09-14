@@ -17,3 +17,7 @@ class Hand:
         if ace and total + 10 <= 21:
             total += 10
         return total
+
+
+if __name__ == '__main__':
+    hand1 = Hand()
