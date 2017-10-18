@@ -1,0 +1,10 @@
+.container {
+    width: 100%;
+}
+
+#content {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #0f0f10;
+}

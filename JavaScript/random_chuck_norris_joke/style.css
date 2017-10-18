@@ -1,0 +1,27 @@
+body {
+    background-color: #024959;
+    color: #092140;
+}
+
+.content {
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.container {
+    width: 94%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#main {
+    background-color: #F2C777;
+    border-radius: 20px;
+    text-align: center;
+    padding: 5px;
+}
+
+#jokeDiv {
+    min-height: 100px;
+    text-align: left;
+}

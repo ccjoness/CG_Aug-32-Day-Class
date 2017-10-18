@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Station</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="bg"></div>
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner black centered">
+
+                    <div class="inner cover">
+                        <h1 class="cover-heading" id='cityName'>
+                            City Name
+                        </h1>
+
+                        <br>
+
+                        <span class="lead">
+                            The weather is currently:
+                            <span id='currCond'>
+                            </span>
+                            and
+                            <span id='currCondDesc'>
+                            </span>
+                            .
+                        </span>
+
+                        <br>
+
+                        <span class="lead">
+                            The wind is blowing to the
+                            <span id='currWind'>
+                                Current Wind
+                            </span>
+                            at
+                            <span id="windSpeed">
+
+                            </span>
+                            MPH
+                        </span>
+
+                        <br>
+
+                        <div id="tempBox">
+                            <span id='currTempFs' class="lead">
+                                The temperature is <span class="lead" id='currTempF'>Current Temp F</span> F<br/>
+                            </span>
+
+                            <span id='currTempCs' class="lead" style="display:none">
+                                The temperature is <span class="lead" id='currTempC'>Current Temp C</span> C<br/>
+                            </span>
+                        </div>
+
+                        <div>
+                            <button class="tempButton active" id='f' disabled>Temp in Fahrenheit</button>
+                            |
+                            <button class="tempButton" id='c'>Temp in Celsius</button>
+                        </div>
+                        <br/> API by OpenWeatherMap
+                    </div>
+                    <hr>
+                    <div>
+                        <h3>Check Weather In Another City</h3>
+                        <input type="text" id="newCity">
+                        <br>
+                        <button id="citySearch">Check Weather</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

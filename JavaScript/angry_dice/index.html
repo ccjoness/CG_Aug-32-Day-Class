@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Angry Dice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="box">
+        <div>
+            <h1>Angry Dice</h1>
+            <p>Angry Dice is a real-time dice rolling microgame. </p>
+            <p>The object is to be the first to six by rolling your dice in ascending order pairs. Players each have two
+                dice they can roll and they can hold a die
+                (except a 6), if it rolls to something they will need.</p>
+        </div>
+        <div id="instructionsList">
+            <ul>
+                <li>Round 1 - Die 1 and Die 2</li>
+                <li>Round 2 - Die 3 and Die 4</li>
+                <li>Round 1 - Die 5 and Die 6</li>
+                <li>If you get two Angry Dice you must start at round 1 again.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="box smallBox">
+        <span id="roundNumber">Round: 1</span>
+    </div>
+    <div class="content">
+        <div id="one">
+            <div class="dieHolder">
+                <img id="die1" src="img/3.png" alt="die 1">
+            </div>
+            <button class="btn btn--stripe btn--radius holdButton" id="0" data-text-original="Hold"
+                    data-text-swap="Held" disabled>Hold
+            </button>
+        </div>
+
+
+        <div id="two">
+            <div class="dieHolder">
+                <img id="die2" src="img/3.png" alt="die 1">
+            </div>
+            <button class="btn btn--stripe btn--radius holdButton" id="1" data-text-original="Hold"
+                    data-text-swap="Held" disabled>Hold
+            </button>
+        </div>
+
+    </div>
+    <div class="content spacer">
+        <button class="btn btn--stripe controls" id="roll" disabled>Roll</button>
+        <button class="btn btn--stripe controls play" id="newGame">Play</button>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

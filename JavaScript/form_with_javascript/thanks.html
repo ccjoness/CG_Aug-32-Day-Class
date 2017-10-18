@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanks</title>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<h1>Thanks</h1>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+    var uriObj = {};
+    var uriArr = decodeURIComponent(window.location.search.substring(1)).split('&');
+
+    $.each(uriArr, function (index, item) {
+        console.log(index);
+        var itemSplit = item.split('=');
+        uriObj[itemSplit[0]] = itemSplit[1].replace(/\+/g, ' ');
+    });
+    console.log(uriObj)
+</script>
+</body>
+</html>

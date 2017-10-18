@@ -1,0 +1,7 @@
+#game {
+    width: 515px;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
