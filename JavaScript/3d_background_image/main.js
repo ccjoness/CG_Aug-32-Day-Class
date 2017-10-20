@@ -41,8 +41,10 @@ let scene = new THREE.Scene();
 
 // Setup the camera
 let camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 10.7;
-camera.position.y = 4.9;
+const camera_top = 5;
+const camera_bottom = -25;
+camera.position.z = 11;
+camera.position.y = camera_top;
 
 // Setup the renderer
 let renderer = new THREE.WebGLRenderer();
@@ -100,34 +102,61 @@ let render = function () {
 
 render();
 let height = $(document).outerHeight(true);
-const movement = height / 10000;
+let maxScroll = .05 * height;
+let movement = height / 10000;
 let iScrollPos = 0;
+
+function debouncer(func, tmeout) {
+    let timeoutID, timeout = tmeout || 200;
+    return function () {
+        let scope = this, args = arguments;
+        clearTimeout(timeoutID);
+        timeoutID = setTimeout(function () {
+            func.apply(scope, Array.prototype.slice.call(args));
+        }, timeout);
+    };
+}
+
+function findCameraVector() {
+    // percentage of widow pos for scroll area
+    let top = $(window).scrollTop(); // pixel val of top window pos
+    let current_percent_of_element_dec = top / maxScroll; //what percentage have we moved in decimal form?
+
+    if (current_percent_of_element_dec * 100 < 100.0) {
+        console.log(parseFloat((current_percent_of_element_dec * 100).toFixed(1)));
+        // console.log((current_percent_of_element_dec * 100).toFixed(2) + '%'); // percent of total moved
+        // console.log(current_percent_of_element_dec * top)
+    }
+}
 
 $(window)
     .scroll(function () {
         console.log('Detected Scroll');
-        console.log($(window).scrollTop() * 0.85);
-        let iCurScrollPos = $(this).scrollTop();
-        // if (camera.position.y > -16) {
-        //     console.log('too low')
+        // this.preventDefault();
+        // let current_pos = ($(window).scrollTop() / $(document).outerHeight(true)) * 100;
+        findCameraVector();
+        // let iCurScrollPos = $(this).scrollTop();
+        //
+        // if (iCurScrollPos > iScrollPos) {
+        //     //Scrolling Down
+        //     camera.position.y -= movement;
+        //     document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
+        //
+        // } else {
+        //     //Scrolling Up
+        //     camera.position.y += movement;
+        //     document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
+        //     // console.log('..up');
+        //     // console.log(camera.position);
         // }
-        if (iCurScrollPos > iScrollPos) {
-            //Scrolling Down
-            camera.position.y -= movement;
-            document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
-            // console.log('..down');
-            console.log(camera.position);
-        } else {
-            //Scrolling Up
-            camera.position.y += movement;
-            document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
-            // console.log('..up');
-            console.log(camera.position);
-        }
-        iScrollPos = iCurScrollPos;
+        // // }
+        // iScrollPos = iCurScrollPos;
+
 
     })
     .on('resize', function () {
+        height = $(document).outerHeight(true);
+        maxScroll = .05 * height;
         camera.aspect = window.innerWidth / window.innerHeight;
         document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
     });
