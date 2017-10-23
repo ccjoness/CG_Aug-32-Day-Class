@@ -1,48 +1,14 @@
-const focal_point_speed = 5;
-const layer_difference = 1;
-
-
-// if (window.addEventListener) window.addEventListener('DOMMouseScroll', wheel, false);
-// window.onmousewheel = document.onmousewheel = wheel;
-//
-// function wheel(event) {
-//     let delta = 0;
-//     if (event.wheelDelta) {
-//         console.log(event.wheelDelta);
-//         delta = event.wheelDelta / 120;
-//     }
-//     else if (event.detail) {
-//         console.log('detail');
-//         delta = -event.detail / 3;
-//     }
-//
-//     handle(delta);
-//     if (event.preventDefault) {
-//         event.preventDefault();
-//     }
-//     event.returnValue = false;
-// }
-//
-// function handle(delta) {
-//     let time = 100;
-//     let distance = 100;
-//
-//     $('html, body').stop().animate({
-//         scrollTop: $(window).scrollTop() - (distance * delta)
-//     }, time);
-//     camera.position.y += movement;
-//     document.body.style.background = "url(" + canvas[0].toDataURL() + ")"
-// }
-
-
 // Setup a new scene
 let scene = new THREE.Scene();
+let height = $(document).outerHeight(true);
+let maxScroll = Math.round(.2 * height);
+let vectorArray = [5, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0, -0.5, -1.0, -1.5, -2.0, -2.5, -3.0, -3.5, -4.0, -4.5, -5.0, -5.5, -6.0, -6.5, -7.0, -7.5, -8.0, -8.5, -9.0, -9.5, -10.0, -10.5, -11.0, -11.5, -12.0, -12.5, -13.0, -13.5, -14.0, -14.5, -15.0, -15.5, -16.0, -16.5, -17.0, -17.5, -18.0, -18.5, -19.0, -19.5, -20.0, -20.5, -21.0, -21.5, -22.0, -22.5, -23.0, -23.5, -24.0, -24.5, -25];
+let bgFrames = vectorArray.length - 1;
 
-
+let time = 3000; // animation time
 // Setup the camera
 let camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 const camera_top = 5;
-const camera_bottom = -25;
 camera.position.z = 11;
 camera.position.y = camera_top;
 
@@ -63,7 +29,6 @@ scene.add(light);
 
 // Models
 let model;
-let sphereModel;
 
 // Load the JSON files and provide callback functions (modelToScene
 let loader = new THREE.JSONLoader();
@@ -77,81 +42,24 @@ function addModelToScene(geometry, material) {
     scene.add(model);
 }
 
-// // Special callback to get a reference to the sphere
-// function addSphereToScene( geometry, materials ){
-//   let material = new THREE.MeshFaceMaterial(materials);
-//   sphereModel = new THREE.Mesh( geometry, material );
-//   sphereModel.scale.set(0.5,0.5,0.5);
-//   sphereModel.position.y += 0.5;
-//   scene.add( sphereModel );
-// }
-
-
-// Render loop to rotate our sphere by a little bit each frame
 let render = function () {
     requestAnimationFrame(render);
-
-//        if (typeof sphereModel != "undefined") {
-//            // Rotate the sphere
-//            sphereModel.rotation.y += 0.001;
-//            sphereModel.rotation.x += 0.002;
-//        }
-
+    document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
     renderer.render(scene, camera);
 };
 
-render();
-let height = $(document).outerHeight(true);
-let maxScroll = .05 * height;
-let movement = height / 10000;
-let iScrollPos = 0;
-
-function debouncer(func, tmeout) {
-    let timeoutID, timeout = tmeout || 200;
-    return function () {
-        let scope = this, args = arguments;
-        clearTimeout(timeoutID);
-        timeoutID = setTimeout(function () {
-            func.apply(scope, Array.prototype.slice.call(args));
-        }, timeout);
-    };
-}
 
 function findCameraVector() {
-    // percentage of widow pos for scroll area
     let top = $(window).scrollTop(); // pixel val of top window pos
     let current_percent_of_element_dec = top / maxScroll; //what percentage have we moved in decimal form?
+    camera.position.y = vectorArray[parseInt(parseFloat(((current_percent_of_element_dec).toFixed(4)) * bgFrames).toFixed(0))];
 
-    if (current_percent_of_element_dec * 100 < 100.0) {
-        console.log(parseFloat((current_percent_of_element_dec * 100).toFixed(1)));
-        // console.log((current_percent_of_element_dec * 100).toFixed(2) + '%'); // percent of total moved
-        // console.log(current_percent_of_element_dec * top)
-    }
 }
 
 $(window)
-    .scroll(function () {
+    .scroll(function (event) {
         console.log('Detected Scroll');
-        // this.preventDefault();
-        // let current_pos = ($(window).scrollTop() / $(document).outerHeight(true)) * 100;
         findCameraVector();
-        // let iCurScrollPos = $(this).scrollTop();
-        //
-        // if (iCurScrollPos > iScrollPos) {
-        //     //Scrolling Down
-        //     camera.position.y -= movement;
-        //     document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
-        //
-        // } else {
-        //     //Scrolling Up
-        //     camera.position.y += movement;
-        //     document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
-        //     // console.log('..up');
-        //     // console.log(camera.position);
-        // }
-        // // }
-        // iScrollPos = iCurScrollPos;
-
 
     })
     .on('resize', function () {
@@ -160,48 +68,104 @@ $(window)
         camera.aspect = window.innerWidth / window.innerHeight;
         document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
     });
-// $(document).keydown(function (e) {
-//     console.log(e.which);
-//     switch (e.which) {
-//         case 37: // left
-//             break;
-//
-//         case 38: // up
-//             camera.position.y += movement;
-//             document.body.style.background = "url(" + canvas[0].toDataURL() + ")";
-//             console.log(camera.position);
-//             break;
-//
-//         case 39: // right
-//             break;
-//
-//         case 40: // down
-//             camera.position.y -= movement;
-//             document.body.style.background = "url(" + canvas[0].toDataURL() + ")";
-//             console.log(camera.position);
-//             break;
-//
-//         case 87: // w
-//             camera.position.z -= movement;
-//             document.body.style.background = "url(" + canvas[0].toDataURL() + ")";
-//             console.log(camera.position);
-//             break;
-//
-//         case 83: // s
-//             camera.position.z += movement;
-//             document.body.style.background = "url(" + canvas[0].toDataURL() + ")";
-//             console.log(camera.position);
-//             break;
-//         default:
-//             return; // exit this handler for other keys
-//     }
-//     e.preventDefault(); // prevent the default action (scroll / move caret)
-// });
+
 let canvas;
 canvas = $('canvas');
-
+render();
 canvas.css('display', 'none');
-setTimeout(function () {
-    document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
-}, 100);
+$('.spacer').css('height', window.innerHeight + 'px');
+$('#bg01').css('top', window.innerHeight + 'px');
 
+let keys = [37, 38, 39, 40];
+
+function preventDefault(e) {
+    e = e || window.event;
+    if (e.preventDefault)
+        e.preventDefault();
+    e.returnValue = false;
+}
+
+function keydown(e) {
+    for (let i = keys.length; i--;) {
+        if (e.keyCode === keys[i]) {
+            preventDefault(e);
+            return;
+        }
+    }
+}
+
+function wheel(e) {
+    preventDefault(e);
+}
+
+function disable_scroll() {
+    if (window.addEventListener) {
+        window.addEventListener('DOMMouseScroll', wheel, false);
+    }
+    window.onmousewheel = document.onmousewheel = wheel;
+    document.onkeydown = keydown;
+}
+
+function enable_scroll() {
+    if (window.removeEventListener) {
+        window.removeEventListener('DOMMouseScroll', wheel, false);
+    }
+    window.onmousewheel = document.onmousewheel = document.onkeydown = null;
+}
+
+let animating = false;
+
+
+function handle(delta, direction) {
+    animating = true;
+    disable_scroll();
+
+    if (direction === -1) {
+        $('.main').stop().animate({'opacity': '1'}, 3000);
+    } else if (direction === 1) {
+        $('.main').stop().animate({'opacity': '0'}, 2000);
+    }
+
+    $('html, body').stop().animate({
+        scrollTop: delta
+    }, time, function () {
+        animating = false;
+        enable_scroll()
+    });
+
+}
+
+window.addEventListener('wheel', findScrollDirectionOtherBrowsers);
+
+function findScrollDirectionOtherBrowsers(event) {
+    let delta;
+    if (event.wheelDelta) {
+        delta = event.wheelDelta;
+    } else {
+        delta = -1 * event.deltaY;
+    }
+
+    if (delta < 0) {
+        if ($(window).scrollTop() < maxScroll + 10 && !animating) {
+            handle($('.main').offset().top, -1);
+
+        }
+        console.log("DOWN");
+    } else if (delta > 0) {
+        if ($(window).scrollTop() < $('.main').offset().top && !animating) {
+            handle(0, 1);
+
+        }
+        console.log("UP");
+    }
+
+}
+
+$(document).ready(function () {
+    window.scrollTo(0, 0);
+    setTimeout(function () {
+        // document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
+        $('body').addClass('loaded');
+    }, 1000);
+
+});
