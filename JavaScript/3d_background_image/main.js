@@ -31,8 +31,48 @@ scene.add(light);
 let model;
 
 // Load the JSON files and provide callback functions (modelToScene
-let loader = new THREE.JSONLoader();
-loader.load("wireframe-hills-and-river.json", addModelToScene);
+// let loader = new THREE.JSONLoader();
+// loader.load("wireframe-hills-and-river-blue.json", addModelToScene);
+
+
+
+
+
+
+
+
+
+let loader = new THREE.ObjectLoader();
+
+loader.load(
+    // resource URL
+    "wireframe-hills-and-river-blue.json",
+
+    // pass the loaded data to the onLoad function.
+//Here it is assumed to be an object
+    function ( obj ) {
+		//add the loaded object to the scene
+        // mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+        scene.add( obj );
+    },
+
+    // Function called when download progresses
+    function ( xhr ) {
+        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    },
+
+    // Function called when download errors
+    function ( xhr ) {
+        console.error( 'An error happened' );
+    }
+);
+
+
+
+
+
+
+js_game_example
 
 
 // After loading JSON from our file, we add it to the scene
@@ -46,6 +86,7 @@ let render = function () {
     requestAnimationFrame(render);
     document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
     renderer.render(scene, camera);
+    // console.log('ping');
 };
 
 
@@ -146,9 +187,8 @@ function findScrollDirectionOtherBrowsers(event) {
     }
 
     if (delta < 0) {
-        if ($(window).scrollTop() < maxScroll + 10 && !animating) {
+        if ($(window).scrollTop() -10 < maxScroll && !animating) {
             handle($('.main').offset().top, -1);
-
         }
         console.log("DOWN");
     } else if (delta > 0) {
@@ -164,7 +204,6 @@ function findScrollDirectionOtherBrowsers(event) {
 $(document).ready(function () {
     window.scrollTo(0, 0);
     setTimeout(function () {
-        // document.body.style.background = "url(" + canvas[0].toDataURL() + ") no-repeat center center fixed";
         $('body').addClass('loaded');
     }, 1000);
 

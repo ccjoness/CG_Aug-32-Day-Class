@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}WOO{% endblock %}
+{% block content %}
+    <div>
+        <h1>Profile for {{ user.get_full_name }}</h1>
+        <img style="border: 1px solid white;border-radius: 50%; height: 200px" src="{{ user.profile_image.url }}" alt="ME!">
+        {% if user.reports.all %}
+            <ul>
+            {% for note in user.reports.all %}
+                <li><p>{{ note.note }}</p></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div>{{ user.get_full_name }} does not have any notes yet.</div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

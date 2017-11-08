@@ -5,6 +5,18 @@
     <div>
         <h1>Hello {{ user.username }}</h1>
     </div>
+    <div>
+        <ul>
+            {% for person in p %}
+                <li>{{ person.get_full_name }} - {{ person.phone_number }}</li>
+                <ul>
+                    {% for r in person.reports.all %}
+                        <li>{{ r.note }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 
 {% block js %}
