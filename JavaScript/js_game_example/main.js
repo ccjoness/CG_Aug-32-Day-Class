@@ -20,11 +20,23 @@ let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
     for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = {
-            x: 0,
-            y: 0,
-            status: 1
+        if (Math.floor(Math.random() * 100) > 80) {
+            bricks[c][r] = {
+                x: 0,
+                y: 0,
+                status: 1,
+                special: true
+            }
+        } else {
+            bricks[c][r] = {
+                x: 0,
+                y: 0,
+                status: 1,
+                special: false
+            }
         }
+
+
     }
 }
 
@@ -35,16 +47,48 @@ let ballRadius = 10;
 
 // paddle globals
 let paddleHeight = 10;
-let paddleWidth = 80;
-let paddleX = (canvas.width - paddleWidth) / 2;
+let paddleWidthStandard = 80;
+let paddleWidth = {w:80};
+let paddleX = (canvas.width - paddleWidth.w) / 2;
 
 // Control globals
 let rightPressed = false;
 let leftPressed = false;
 
+// Special Globals
+let specialTimer = 10;
+let paddleWidthSpecial = 200;
+let paddleSpecialRunning = false;
+
 // Control event listeners
 $(document).keydown(keyDownHandler);
 $(document).keyup(keyUpHandler);
+
+// Special functions
+
+function animatePaddle(start = true) {
+    if (!start && !paddleSpecialRunning) {
+        console.log('biggering');
+        paddleSpecialRunning = true;
+        let tween = new TWEEN.Tween(paddleWidth)
+            .to({w:paddleWidthSpecial}, 1000)
+            .start();
+        // for (let x = 0; x < paddleWidthSpecial; x++) {
+        //     paddleWidth ++
+        // }
+    } else {
+        console.log('smallering');
+        paddleSpecialRunning = false;
+        for (let x = paddleWidthSpecial; x > paddleWidthStandard; x--) {
+            paddleWidth.w--
+        }
+    }
+}
+
+function paddleSpecial() {
+    animatePaddle(false);
+    setTimeout(animatePaddle, 3000)
+}
 
 // Collision detection for bricks
 function collisionDetection() {
@@ -52,6 +96,9 @@ function collisionDetection() {
         for (let r = 0; r < brickRowCount; r++) {
             let b = bricks[c][r];
             if (ballRectCollisionDetection(x, y, b) && b.status === 1) {
+                if (b.special) {
+                    paddleSpecial()
+                }
                 dy = -dy;
                 b.status = 0;
                 score++;
@@ -85,7 +132,7 @@ function ballRectCollisionDetection(ballX, ballY, brick) {
 
     let bx = disX - brickWidth / 2;
     let by = disY - brickHeight / 2;
-    return (bx*bx+by*by<=(ballRadius*ballRadius))
+    return (bx * bx + by * by <= (ballRadius * ballRadius))
 }
 
 // Control functions
@@ -124,7 +171,7 @@ function drawBall() {
 
 function drawPaddle() {
     ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth.w, paddleHeight);
     ctx.fillStyle = '##0095DD';
     ctx.fill();
     ctx.closePath();
@@ -140,7 +187,12 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#0095DD";
+                if (bricks[c][r].special) {
+                    ctx.fillStyle = "#dd0011";
+                } else {
+                    ctx.fillStyle = "#0095DD";
+                }
+
                 ctx.fill();
                 ctx.closePath();
             }
@@ -150,11 +202,11 @@ function drawBricks() {
 
 function draw() {
     // clear canvas
-    console.log(bricks)
+    console.log(paddleWidth);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Control movement
-    if (rightPressed && paddleX < canvas.width - paddleWidth) {
+    if (rightPressed && paddleX < canvas.width - paddleWidth.w) {
         paddleX += 7;
     }
     else if (leftPressed && paddleX > 0) {
@@ -166,7 +218,7 @@ function draw() {
     if (y + dy < ballRadius) {
         dy = -dy;
     } else if (y + dy + paddleHeight > canvas.height - ballRadius) {
-        if (x > paddleX && x < paddleX + paddleWidth) {
+        if (x > paddleX && x < paddleX + paddleWidth.w) {
             dy = -dy;
         } else if (y + dy > canvas.height - ballRadius) {
             alert('Game Over! You suck');
