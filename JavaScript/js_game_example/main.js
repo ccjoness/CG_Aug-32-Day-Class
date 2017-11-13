@@ -59,7 +59,7 @@ let leftPressed = false;
 let specialTimer = 10;
 let paddleWidthSpecial = 200;
 let paddleSpecialRunning = false;
-
+let paddleAnimation;
 // Control event listeners
 $(document).keydown(keyDownHandler);
 $(document).keyup(keyUpHandler);
@@ -68,20 +68,21 @@ $(document).keyup(keyUpHandler);
 
 function animatePaddle(start = true) {
     if (!start && !paddleSpecialRunning) {
-        console.log('biggering');
         paddleSpecialRunning = true;
-        let tween = new TWEEN.Tween(paddleWidth)
-            .to({w:paddleWidthSpecial}, 1000)
-            .start();
-        // for (let x = 0; x < paddleWidthSpecial; x++) {
-        //     paddleWidth ++
-        // }
+        paddleAnimation = setInterval(function () {
+            paddleWidth.w += 2;
+            if (paddleWidth.w === paddleWidthSpecial){
+                clearInterval(paddleAnimation)
+            }
+        }, 10)
     } else {
-        console.log('smallering');
         paddleSpecialRunning = false;
-        for (let x = paddleWidthSpecial; x > paddleWidthStandard; x--) {
-            paddleWidth.w--
-        }
+        paddleAnimation = setInterval(function () {
+            paddleWidth.w -= 2;
+            if (paddleWidth.w === paddleWidthStandard){
+                clearInterval(paddleAnimation)
+            }
+        }, 10)
     }
 }
 
@@ -242,4 +243,4 @@ function draw() {
     collisionDetection();
 }
 
-let animate = setInterval(draw, 10);
+// let animate = setInterval(draw, 10);
